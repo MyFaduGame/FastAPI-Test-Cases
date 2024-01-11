@@ -28,17 +28,6 @@ jobs:
       run: |
         pytest
 
-    - name: Check pytest success rate
-      run: |
-        total_tests=$(pytest --collect-only -q | grep 'collected' | awk '{print $2}')
-        successful_tests=$(pytest --cov=your_app --cov-report=xml | grep 'total="0"')
-        
-        success_rate=$(( (successful_tests * 100) / total_tests ))
-        if [ $success_rate -lt 90 ]; then
-          echo "Test success rate is below 90%. Exiting..."
-          exit 1
-        fi
-
     - name: Additional CI/CD steps
       run: |
         # Add additional CI/CD steps here
