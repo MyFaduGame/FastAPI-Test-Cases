@@ -1,0 +1,43 @@
+name: Test Cases
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requierements.txt
+
+    - name: Run pytest
+      run: |
+        pytest
+
+    - name: Check pytest success rate
+      run: |
+        total_tests=$(pytest --collect-only -q | grep 'collected' | awk '{print $2}')
+        successful_tests=$(pytest --cov=your_app --cov-report=xml | grep 'total="0"')
+        
+        success_rate=$(( (successful_tests * 100) / total_tests ))
+        if [ $success_rate -lt 90 ]; then
+          echo "Test success rate is below 90%. Exiting..."
+          exit 1
+        fi
+
+    - name: Additional CI/CD steps
+      run: |
+        # Add additional CI/CD steps here
