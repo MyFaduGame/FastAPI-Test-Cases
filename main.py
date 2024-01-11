@@ -14,7 +14,7 @@ app = FastAPI()
 class Item(BaseModel):
     id: str
     title: str
-    description: str | None = None
+    description: str
 
 
 @app.get("/items/{item_id}", response_model=Item)
